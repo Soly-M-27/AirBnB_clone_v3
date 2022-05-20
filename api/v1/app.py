@@ -1,11 +1,13 @@
 #!/usr/bin/python3
 ''' Your first endpoint (route) will be to return the status of your API '''
 
-from flask import Flask
-from models import storage
 from api.v1.views import app_views
+from flask import Flask
+from os import getenv
+from models import storage
 
-app = Flask("app_views", __name__)
+app = Flask(__name__)
+app.resgister_blueprint(app_views)
 
 @app.teardown_appcontext
 ''' storage.close() '''
@@ -22,4 +24,4 @@ if not port:
     port = "5000"
 
 if __name__ == "__main__":
-    app.run(host=host, port=port, threaded = True)
+    app.run(host=host, port=port, threaded=True)
