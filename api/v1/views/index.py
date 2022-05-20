@@ -1,12 +1,14 @@
 #!/usr/bin/python3
+''' It’s time to start your API! '''
 
 from api.v1.views import app_views
-from flask import make_response
+from flask import make_response, jsonify
 from models import storage
 
-@app.route('/status')
+@app_views.route('/status')
 def status():
-    return app_views(jsonify({'status': 'OK'}))
+    ''' return json dic of status '''
+    return jsonify({'status': 'OK'})
 
 @app.route('/api/v1/stats')
 def stats():
@@ -16,5 +18,13 @@ def stats():
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
+host = getenv("HBNB_API_HOST")
+port = getenv("HBNB_API_PORT")
+
+if not host:
+    host = "0.0.0.0"
+if not port:
+    port = "5000"
+
 if __name__ == "__main__":
-    app.run(HBNB_API_HOST = "0.0.0.0", HBNB_API_PORT = 5000, threaded = True)
+    app.run(host, port, threaded = True)
