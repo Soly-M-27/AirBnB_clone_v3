@@ -16,8 +16,9 @@ if not port:
     port = "5000"
 
 @app.teardown_appcontext
+''' storage.close() '''
 def close():
     storage.close()
 
 if __name__ == "__main__":
-    app.run(host, port, threaded = True)
+    app.run(host=host, port=port, threaded = True)
