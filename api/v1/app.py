@@ -6,13 +6,15 @@ from flask import Flask
 from os import getenv
 from models import storage
 
+
 app = Flask(__name__)
 app.resgister_blueprint(app_views)
 
+
 @app.teardown_appcontext
-''' storage.close() '''
 def close():
     storage.close()
+
 
 ''' Check host and port with getenv '''
 host = getenv("HBNB_API_HOST")
