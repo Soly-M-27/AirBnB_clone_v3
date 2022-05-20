@@ -7,9 +7,17 @@ from api.v1.views import app_views
 
 app = Flask("app_views", __name__)
 
+host = getenv("HBNB_API_HOST")
+port = getenv("HBNB_API_PORT")
+
+if not host:
+    host = "0.0.0.0"
+if not port:
+    port = "5000"
+
 @app.teardown_appcontext
 def close():
     storage.close()
 
 if __name__ == "__main__":
-    app.run(HBNB_API_HOST = "0.0.0.0", HBNB_API_PORT = 5000, threaded = True)
+    app.run(host, port, threaded = True)
