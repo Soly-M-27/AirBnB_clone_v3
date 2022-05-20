@@ -71,12 +71,13 @@ class FileStorage:
         self.reload()
 
     def get(self, cls, id):
+        if cls is None:
+            return None
         obj_cls = models.storage.all("{}".format(cls))
         for key in obj_cls.values():
             if key.id == id:
                 return key
-            else:
-                return None
+        return key
 
     def count(self, cls=None):
         if cls:
