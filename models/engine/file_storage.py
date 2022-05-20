@@ -73,7 +73,7 @@ class FileStorage:
     def get(self, cls, id):
         if cls is None:
             return None
-        obj_cls = models.storage.all("{}".format(cls))
+        obj_cls = self.all("{}".format(cls))
         for key in obj_cls.values():
             if key.id == id:
                 return key
