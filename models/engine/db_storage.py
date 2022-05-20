@@ -88,7 +88,7 @@ class DBStorage:
         return self.count
 
     def get(self, cls, id):
-        obj_cls = self.all(cls)
+        obj_cls = models.storage.all("{}".format(cls))
         for key in obj_cls.values():
             if key.id == id:
                 return key
