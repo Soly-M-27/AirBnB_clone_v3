@@ -14,16 +14,16 @@ from api.v1.views import app_views
                  methods=['GET', 'POST'], strict_slashes=False)
 def get_all_city_obj(state_id=None):
     ''' Retrieves the list of all State objects '''
+    state = storage.get(State, state_id)
+    if state is None:
+        abort(404)
     if request.method == "POST":
         HTTP_body = request.get_json()
-        state = storage.get(State, state_id)
-        if state is None:
-            abort(404)
         if not HTTP_body:
             return Response("Not a JSON", 400)
         if 'name' not in HTTP_body:
             return Response("Missing name", 400)
-        new_city = City(name=HTTP_body.get('name'))
+        new_city = City(name=HTTP_body.get('name'), state_id=state.id)
         new_city.save()
         return (jsonify(new_city.to_dict()), 201)
 
@@ -31,7 +31,8 @@ def get_all_city_obj(state_id=None):
     Existing_Cities = []
 
     for city in All_Cities.values():
-        Existing_Cities.append(new_city.to_dict())
+        if city.state_id == state.id:
+            Existing_Cities.append(new_city.to_dict())
     return jsonify(Existing_Cities)
 
 
@@ -52,6 +53,10 @@ def get_a_state(city_id=None):
         HTTP_body = request.get_json()
         if not HTTP_body:
             return Response("Not a JSON", 400)
+        HTTP_body['id'] = city_id.id
+        HTTP_body['created_at'] = city_id.created_at
+        HTTP_body['state_id'] = city_id.state_id
+        HTTP_body__init__(**HTTP_body)
         city_id.save()
         return (jsonify(city_id.to_dict()), 200)
     return jsonify(city_id.to_dict())
