@@ -65,10 +65,6 @@ class FileStorage:
             if key in self.__objects:
                 del self.__objects[key]
 
-    def close(self):
-        """call reload() method for deserializing the JSON file to objects"""
-        self.reload()
-
     def get(self, cls, id):
         if cls:
             obj_cls = self.all(cls)
@@ -82,3 +78,7 @@ class FileStorage:
         if cls:
             return len(self.all(cls))
         return len(self.all())
+
+    def close(self):
+        """call reload() method for deserializing the JSON file to objects"""
+        self.reload()

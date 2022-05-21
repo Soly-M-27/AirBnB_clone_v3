@@ -45,7 +45,7 @@ class DBStorage:
         new_dict = {}
         for clss in classes:
             if cls is None or cls is classes[clss] or cls is clss:
-                objs = self.__session.query(classes[cls]).all()
+                objs = self.__session.query(classes[clss]).all()
                 for obj in objs:
                     key = obj.__class__.__name__ + '.' + obj.id
                     new_dict[key] = obj
@@ -71,10 +71,6 @@ class DBStorage:
         Session = scoped_session(sess_factory)
         self.__session = Session
 
-    def close(self):
-        """call remove() method on the private session attribute"""
-        self.__session.remove()
-
     def get(self, cls, id):
         if cls:
             obj_cls = self.all(cls)
@@ -88,3 +84,7 @@ class DBStorage:
         if cls:
             return len(self.all(cls))
         return len(self.all())
+
+    def close(self):
+        """call remove() method on the private session attribute"""
+        self.__session.remove()
