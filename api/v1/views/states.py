@@ -26,7 +26,7 @@ def get_all_state_obj():
     Existing_States = []
 
     for state in All_States.values():
-        Existing_States.append(Existing_States.to_dict())
+        Existing_States.append(State.to_dict())
         return jsonify(Existing_States)
 
 
@@ -51,5 +51,5 @@ def get_a_state(state_id=None):
         HTTP_body['created_at'] = state.created_at
         state.__init__(**HTTP_body)
         state.save()
-        return (jsonify(state.to_dict()), 200)
-    return jsonify(state.to_dict())
+        return (jsonify(State.to_dict()), 200)
+    return jsonify(State.to_dict())
