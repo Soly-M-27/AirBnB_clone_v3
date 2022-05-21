@@ -3,7 +3,7 @@
 RESTful API actions '''
 
 
-from flask import jsonify, abort, request, Response
+from flask import request, abort, Response, jsonify
 from models import storage
 from models.state import State
 from api.v1.views import app_views
@@ -27,7 +27,7 @@ def get_all_state_obj():
 
     for state in All_States.values():
         Existing_States.append(state.to_dict())
-        return jsonify(Existing_States)
+    return jsonify(Existing_States)
 
 
 @app_views.route('/states/<state_id>', methods=['GET', 'DELETE', 'PUT'],
