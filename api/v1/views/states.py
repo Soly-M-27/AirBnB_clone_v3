@@ -20,7 +20,7 @@ def get_all_state_obj():
             return make_response("Missing name", 400)
         State = State(name=HTTP_body.get('name'))
         State.save()
-        return make_response(jsonify(state.to_dict()), 201)
+        return (jsonify(state.to_dict()), 201)
 
     All_States = storage.all('State')
     Existing_States = []
@@ -41,7 +41,7 @@ def get_a_state(state_id=None):
     if request.method == "DELETE":
         storage.delete(state)
         storage.save()
-        return make_response(jsonify({}), 200)
+        return (jsonify({}), 200)
 
     if request.method == "PUT":
         HTTP_body = request.get_json()
@@ -51,5 +51,5 @@ def get_a_state(state_id=None):
         HTTP_body['created_at'] = state.created_at
         state.__init__(**HTTP_body)
         state.save()
-        return make_response(jsonify(state.to_dict()), 200)
+        return (jsonify(state.to_dict()), 200)
     return jsonify(state.to_dict())
