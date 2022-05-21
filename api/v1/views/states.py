@@ -18,15 +18,15 @@ def get_all_state_obj():
             return Response("Not a JSON", 400)
         if 'name' not in HTTP_body:
             return Response("Missing name", 400)
-        State = State(name=HTTP_body.get('name'))
-        State.save()
+        state = State(name=HTTP_body.get('name'))
+        state.save()
         return (jsonify(state.to_dict()), 201)
 
     All_States = storage.all('State')
     Existing_States = []
 
     for state in All_States.values():
-        Existing_States.append(State.to_dict())
+        Existing_States.append(state.to_dict())
         return jsonify(Existing_States)
 
 
@@ -34,8 +34,8 @@ def get_all_state_obj():
                  strict_slashes=False)
 def get_a_state(state_id=None):
     ''' Retrives, Deleted or Updates a specified State '''
-    State = storage.get(State, state_id)
-    if State is None:
+    state = storage.get(State, state_id)
+    if state is None:
         abort(404)
 
     if request.method == "DELETE":
@@ -51,5 +51,5 @@ def get_a_state(state_id=None):
         HTTP_body['created_at'] = state.created_at
         state.__init__(**HTTP_body)
         state.save()
-        return (jsonify(State.to_dict()), 200)
-    return jsonify(State.to_dict())
+        return (jsonify(state.to_dict()), 200)
+    return jsonify(state.to_dict())
