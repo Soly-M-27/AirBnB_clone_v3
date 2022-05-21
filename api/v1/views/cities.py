@@ -10,7 +10,7 @@ from models.city import City
 from api.v1.views import app_views
 
 
-@app_views.route('states/<state_id>/cities',
+@app_views.route('/states/<state_id>/cities',
                  methods=['GET', 'POST'], strict_slashes=False)
 def get_all_city_obj(state_id=None):
     ''' Retrieves the list of all State objects '''
@@ -56,7 +56,7 @@ def get_a_state(city_id=None):
         HTTP_body['id'] = city_id.id
         HTTP_body['created_at'] = city_id.created_at
         HTTP_body['state_id'] = city_id.state_id
-        HTTP_body__init__(**HTTP_body)
+        HTTP_body.__init__(**HTTP_body)
         city_id.save()
         return (jsonify(city_id.to_dict()), 200)
     return jsonify(city_id.to_dict())
