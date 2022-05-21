@@ -8,4 +8,5 @@ from models import storage
 
 @app_views.route('/status')
 def status():
+    ''' route status test that return a JSON query '''
     return jsonify({'status': 'OK'})
