@@ -16,7 +16,7 @@ def get_all_user_obj():
         if not HTTP_body:
             return Response("Not a JSON", 400)
         if 'email' not in HTTP_body:
-            return Response("Missing name", 400)
+            return Response("Missing email", 400)
         if 'password' not in HTTP_body:
             return Response("Missing password", 400)
         new_user = User(email=HTTP_body.get('email'),
