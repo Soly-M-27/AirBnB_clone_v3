@@ -51,5 +51,5 @@ def get_a_state(state_id=None):
         HTTP_body['created_at'] = state.created_at
         state.__init__(**HTTP_body)
         state.save()
-        return make_response(jsonify(state.to_doct()), 200)
+        return make_response(jsonify(state.to_dict()), 200)
     return jsonify(state.to_dict())
