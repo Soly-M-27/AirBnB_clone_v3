@@ -2,7 +2,6 @@
 ''' Create a new view for City objects that handles all
 RESTful API actions '''
 
-
 from flask import request, abort, Response, jsonify
 from models import storage
 from models.state import State
@@ -38,14 +37,14 @@ def get_all_city_obj(state_id=None):
 
 @app_views.route('/cities/<city_id>', methods=['GET', 'DELETE', 'PUT'],
                  strict_slashes=False)
-def get_a_state(city_id=None):
+def get_a_city(city_id=None):
     ''' Retrives, Deleted or Updates a specified State '''
-    city_id = storage.get(City, city_id)
-    if city_id is None:
+    a_city = storage.get(City, city_id)
+    if a_city is None:
         abort(404)
 
     if request.method == "DELETE":
-        storage.delete(city_id)
+        storage.delete(a_city)
         storage.save()
         return (jsonify({}), 200)
 
@@ -53,10 +52,10 @@ def get_a_state(city_id=None):
         HTTP_body = request.get_json()
         if not HTTP_body:
             return Response("Not a JSON", 400)
-        HTTP_body['id'] = city_id.id
-        HTTP_body['created_at'] = city_id.created_at
-        HTTP_body['state_id'] = city_id.state_id
+        HTTP_body['id'] = a_city.id
+        HTTP_body['created_at'] = a_city.created_at
+        HTTP_body['state_id'] = a_city.state_id
         HTTP_body.__init__(**HTTP_body)
-        city_id.save()
-        return (jsonify(city_id.to_dict()), 200)
-    return jsonify(city_id.to_dict())
+        a_city.save()
+        return (jsonify(a_city.to_dict()), 200)
+    return jsonify(a_city.to_dict())
