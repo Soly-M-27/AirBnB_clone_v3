@@ -32,7 +32,7 @@ def get_all_city_obj(state_id=None):
 
     for city in All_Cities.values():
         if city.state_id == state.id:
-            Existing_Cities.append(city.to_dict())
+            Existing_Cities.append(new_city.to_dict())
     return jsonify(Existing_Cities)
 
 
