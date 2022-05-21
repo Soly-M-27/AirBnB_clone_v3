@@ -14,7 +14,7 @@ from api.v1.views import app_views
 def get_all_city_obj(state_id=None):
     ''' Retrieves the list of all State objects '''
     state = storage.get(State, state_id)
-    if state is None:
+    if not state:
         abort(404)
     if request.method == "POST":
         HTTP_body = request.get_json()
