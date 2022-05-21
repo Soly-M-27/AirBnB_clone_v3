@@ -25,13 +25,13 @@ def get_all_amenities_obj():
     Existing_Amenities = []
 
     for ame in All_Amenities.values():
-        Existing_Amenities.append(new_amenity.to_dict())
+        Existing_Amenities.append(ame.to_dict())
     return jsonify(Existing_Amenities)
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['GET', 'DELETE', 'PUT'],
                  strict_slashes=False)
-def get_a_city(amenity_id=None):
+def get_a_amenity(amenity_id=None):
     ''' Retrives, Deleted or Updates a specified Amenity '''
     a_amenity = storage.get(Amenity, amenity_id)
     if a_amenity is None:
