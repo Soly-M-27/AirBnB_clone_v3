@@ -3,7 +3,7 @@
 RESTful API actions '''
 
 
-from flask import request, abort, make_response, jsonify
+from flask import request, abort, Response, jsonify
 from models import storage
 from models.state import State
 from api.v1.views import app_views
@@ -15,9 +15,9 @@ def get_all_state_obj():
     if request.method == "POST":
         HTTP_body = request.get_json()
         if not HTTP_body:
-            return make_response("Not a JSON", 400)
+            return Response("Not a JSON", 400)
         if 'name' not in HTTP_body:
-            return make_response("Missing name", 400)
+            return Response("Missing name", 400)
         State = State(name=HTTP_body.get('name'))
         State.save()
         return (jsonify(state.to_dict()), 201)
@@ -46,7 +46,7 @@ def get_a_state(state_id=None):
     if request.method == "PUT":
         HTTP_body = request.get_json()
         if not HTTP_body:
-            return make_response("Not a JSON", 400)
+            return Response("Not a JSON", 400)
         HTTP_body['id'] = state.id
         HTTP_body['created_at'] = state.created_at
         state.__init__(**HTTP_body)
