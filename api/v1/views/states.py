@@ -3,7 +3,7 @@
 RESTful API actions '''
 
 
-from flask import request, abort, Response, jsonify
+from flask import jsonify, abort, request, Response
 from models import storage
 from models.state import State
 from api.v1.views import app_views
