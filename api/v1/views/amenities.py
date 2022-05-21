@@ -25,7 +25,7 @@ def get_all_amenities_obj():
     Existing_Amenities = []
 
     for ame in All_Amenities.values():
-        Existing_Amenities.append(ame.to_dict())
+        Existing_Amenities.append(new_amenity.to_dict())
     return jsonify(Existing_Amenities)
 
 
