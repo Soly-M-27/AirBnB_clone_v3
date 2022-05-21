@@ -55,7 +55,7 @@ def get_a_city(city_id=None):
         HTTP_body['id'] = a_city.id
         HTTP_body['created_at'] = a_city.created_at
         HTTP_body['state_id'] = a_city.state_id
-        HTTP_body.__init__(**HTTP_body)
+        a_city.__init__(**HTTP_body)
         a_city.save()
         return (jsonify(a_city.to_dict()), 200)
     return jsonify(a_city.to_dict())
