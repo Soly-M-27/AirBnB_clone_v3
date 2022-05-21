@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 ''' Your first endpoint (route) will be to return the status of your API '''
 
+from flask import Flask, jsonify
+from models import storage
 from api.v1.views import app_views
-from flask import Flask
 from os import getenv
 from models import storage
 
@@ -12,18 +13,10 @@ app.resgister_blueprint(app_views)
 
 
 @app.teardown_appcontext
-def close():
+def close(self):
     storage.close()
 
 
-''' Check host and port with getenv '''
-host = getenv("HBNB_API_HOST")
-port = getenv("HBNB_API_PORT")
-
-if not host:
-    host = "0.0.0.0"
-if not port:
-    port = "5000"
-
 if __name__ == "__main__":
-    app.run(host=host, port=port, threaded=True)
+    app.run(host=getenv("HBNB_API_HOST", "0.0.0.0"),
+            port=int(getenv("HBNB_API_PORT", "5000")), threaded=True)

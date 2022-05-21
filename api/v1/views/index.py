@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 ''' It’s time to start your API! '''
 
-from api.v1.views import app_views
-from os import getenv
 from flask import make_response, jsonify
+from api.v1.views import app_views
 from models import storage
+from os import getenv
 
 
 @app_views.route('/status')
@@ -23,14 +23,6 @@ def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 
-''' Check host and port through get env '''
-host = getenv("HBNB_API_HOST")
-port = getenv("HBNB_API_PORT")
-
-if not host:
-    host = "0.0.0.0"
-if not port:
-    port = "5000"
-
 if __name__ == "__main__":
-    app.run(host=host, port=port, threaded=True)
+    app.run(host=getenv("HBNB_API_HOST", "0.0.0.0"),
+            port=int(getenv("HBNB_API_PORT", "5000")), threaded=True)
