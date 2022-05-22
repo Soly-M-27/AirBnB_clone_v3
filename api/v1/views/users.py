@@ -20,7 +20,7 @@ def get_all_user_obj():
         if 'password' not in HTTP_body:
             return Response("Missing password", 400)
         new_user = User(email=HTTP_body.get('email'),
-                        pwd=HTTP_body.get('password'))
+                        password=HTTP_body.get('password'))
         new_user.save()
         return (jsonify(new_user.to_dict()), 201)
 
