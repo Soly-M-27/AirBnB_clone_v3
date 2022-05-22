@@ -23,11 +23,11 @@ def get_all_place_obj(city_id=None):
             return Response("Not a JSON", 400)
         if 'user_id' not in HTTP_body:
             return Response("Missing user_id", 400)
+        if 'name' not in HTTP_body:
+            return Response("Missing name", 400)
         user_check = storage.get(User, HTTP_body.get('user_id'))
         if not user_check:
             abort(404)
-        if 'name' not in HTTP_body:
-            return Response("Missing name", 400)
         new_place = Place(name=HTTP_body.get('name'), city_id=city.id,
                           user_id=user.id)
         new_place.save()
@@ -36,7 +36,7 @@ def get_all_place_obj(city_id=None):
     All_Places = city.places
     Existing_Places = []
 
-    for p in All_Places.values():
+    for p in All_Places:
         Existing_Places.append(p.to_dict())
     return (jsonify(Existing_Places), 200)
 
