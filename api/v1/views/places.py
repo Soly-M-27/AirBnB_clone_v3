@@ -5,8 +5,8 @@ RESTful API actions '''
 from flask import request, abort, Response, jsonify
 from models import storage
 from models.city import City
-from models.place import Place
 from models.user import User
+from models.place import Place
 from api.v1.views import app_views
 
 
@@ -28,8 +28,8 @@ def get_all_place_obj(city_id=None):
         user_check = storage.get(User, HTTP_body.get('user_id'))
         if not user_check:
             abort(404)
-        new_place = Place(name=HTTP_body.get('name'), city_id=city.id,
-                          user_id=user.id)
+        new_place = Place(city_id=city.id, user_id=user.id,
+                          name=HTTP_body.get('name'))
         new_place.save()
         return (jsonify(new_place.to_dict()), 201)
 
