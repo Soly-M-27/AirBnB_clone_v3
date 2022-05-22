@@ -12,7 +12,7 @@ from api.v1.views import app_views
 
 @app_views.route('/cities/<city_id>/places',
                  methods=['GET', 'POST'], strict_slashes=False)
-def get_all_place_obj(city_id=None, user_id=None):
+def get_all_place_obj(city_id=None):
     ''' Retrieves the list of all State objects '''
     city = storage.get(City, city_id)
     if not city:
@@ -23,24 +23,22 @@ def get_all_place_obj(city_id=None, user_id=None):
             return Response("Not a JSON", 400)
         if 'user_id' not in HTTP_body:
             return Response("Missing user_id", 400)
-        user_check = storage.get(User, user_id)
+        user_check = storage.get(User, HTTP_body.get('user_id'))
         if not user_check:
             abort(404)
         if 'name' not in HTTP_body:
             return Response("Missing name", 400)
-        new_place = storage.get(Place, city_id)
         new_place = Place(name=HTTP_body.get('name'), city_id=city.id,
                           user_id=user.id)
         new_place.save()
         return (jsonify(new_place.to_dict()), 201)
 
-    All_Places = storage.all('Place')
+    All_Places = city.places
     Existing_Places = []
 
     for p in All_Places.values():
-        if p.city_id == city_id.id:
-            Existing_Places.append(p.to_dict())
-    return jsonify(Existing_Places)
+        Existing_Places.append(p.to_dict())
+    return (jsonify(Existing_Places), 200)
 
 
 @app_views.route('/places/<place_id>', methods=['GET', 'DELETE', 'PUT'],
@@ -67,4 +65,4 @@ def get_a_place(place_id=None):
         a_place.__init__(**HTTP_body)
         a_place.save()
         return (jsonify(a_place.to_dict()), 200)
-    return jsonify(a_place.to_dict())
+    return (jsonify(a_place.to_dict()), 200)
