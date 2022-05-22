@@ -59,9 +59,9 @@ def get_a_place(place_id=None):
         if not HTTP_body:
             return Response("Not a JSON", 400)
         HTTP_body['id'] = a_place.id
-        HTTP_body['created_at'] = a_place.created_at
         HTTP_body['user_id'] = a_place.user_id
         HTTP_body['city_id'] = a_place.city_id
+        HTTP_body['created_at'] = a_place.created_at
         a_place.__init__(**HTTP_body)
         a_place.save()
         return (jsonify(a_place.to_dict()), 200)
