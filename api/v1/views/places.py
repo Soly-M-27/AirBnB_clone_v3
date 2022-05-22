@@ -13,7 +13,7 @@ from api.v1.views import app_views
 @app_views.route('/cities/<city_id>/places',
                  methods=['GET', 'POST'], strict_slashes=False)
 def get_all_place_obj(city_id=None):
-    ''' Retrieves the list of all State objects '''
+    ''' Retrieves the list of all Places objects '''
     city = storage.get(City, city_id)
     if not city:
         abort(404)
@@ -44,7 +44,7 @@ def get_all_place_obj(city_id=None):
 @app_views.route('/places/<place_id>', methods=['GET', 'DELETE', 'PUT'],
                  strict_slashes=False)
 def get_a_place(place_id=None):
-    ''' Retrives, Deleted or Updates a specified State '''
+    ''' Retrives, Deleted or Updates a specified Place '''
     a_place = storage.get(Place, place_id)
     if a_place is None:
         abort(404)
