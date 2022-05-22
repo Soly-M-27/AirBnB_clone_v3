@@ -17,6 +17,7 @@ def get_all_place_obj(city_id=None):
     city = storage.get(City, city_id)
     if not city:
         abort(404)
+
     if request.method == "POST":
         HTTP_body = request.get_json()
         if not HTTP_body:
@@ -25,9 +26,11 @@ def get_all_place_obj(city_id=None):
             return Response("Missing user_id", 400)
         if 'name' not in HTTP_body:
             return Response("Missing name", 400)
+
         user_check = storage.get(User, HTTP_body.get('user_id'))
         if not user_check:
             abort(404)
+
         new_place = Place(city_id=city.id, user_id=user.id,
                           name=HTTP_body.get('name'))
         new_place.save()
