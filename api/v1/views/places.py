@@ -65,4 +65,4 @@ def get_place(place_id=None):
         place.save()
         return jsonify(place.to_dict()), 200
 
-    return jsonify(place.to_dct()), 200
+    return jsonify(place.to_dict()), 200
