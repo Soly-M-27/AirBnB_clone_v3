@@ -1,71 +1,69 @@
 #!/usr/bin/python3
-''' Create a new view for Review objects that handles all
-RESTful API actions '''
+''' Module that handles all default RESTFul API '''
 
-from flask import request, abort, Response, jsonify
+from flask import jsonify, abort, request, Response
 from models import storage
-from models.review import Review
 from models.user import User
 from models.place import Place
+from models.review import Review
 from api.v1.views import app_views
 
 
-@app_views.route('/places/<place_id>/reviews',
-                 methods=['GET', 'POST'], strict_slashes=False)
-def get_all_review_obj(place_id=None):
-    ''' Retrieves the list of all Review objects '''
+@app_views.route('/places/<place_id>/reviews', methods=['GET', 'POST'],
+                 strict_slashes=False)
+def get_reviews(place_id=None):
+    """ Focus on all the review obj """
     place = storage.get(Place, place_id)
     if not place:
         abort(404)
 
-    if request.method == "POST":
-        HTTP_body = request.get_json()
-        if not HTTP_body:
+    if request.method == 'POST':
+        data = request.get_json()
+        if not data:
             return Response("Not a JSON", 400)
-        if 'user_id' not in HTTP_body:
+        if 'user_id' not in data:
             return Response("Missing user_id", 400)
-        if 'text' not in HTTP_body:
+        if 'text' not in data:
             return Response("Missing text", 400)
-
-        user_check = storage.get(User, HTTP_body.get('user_id'))
-        if not user_check:
+        user = storage.get(User, data.get('user_id'))
+        if not user:
             abort(404)
-
         review = Review(place_id=place.id, user_id=user.id,
-                        text=HTTP_body.get('text'))
+                        text=data.get('text'))
         review.save()
-        return (jsonify(review.to_dict()), 201)
+        return jsonify(review.to_dict()), 201
 
-    All_Reviews = place.reviews
-    Existing_Reviews = []
+    all_reviews = place.reviews
+    reviews = []
 
-    for r in All_Reviews:
-        Existing_Reviews.append(r.to_dict())
-    return (jsonify(Existing_Reviews), 200)
+    for review in all_reviews:
+        reviews.append(review.to_dict())
+    return jsonify(reviews), 200
 
 
 @app_views.route('/reviews/<review_id>', methods=['GET', 'DELETE', 'PUT'],
                  strict_slashes=False)
-def get_a_review(review_id=None):
-    ''' Retrives, Deleted or Updates a specified Place '''
-    a_review = storage.get(Review, review_id)
-    if a_review is None:
+def get_review(review_id=None):
+    """ Focus only on a single place obj """
+    review = storage.get(Review, review_id)
+    if review is None:
         abort(404)
 
-    if request.method == "DELETE":
-        storage.delete(a_review)
+    if request.method == 'DELETE':
+        storage.delete(review)
         storage.save()
-        return (jsonify({}), 200)
+        return jsonify({}), 200
 
-    if request.method == "PUT":
-        HTTP_body = request.get_json()
-        if not HTTP_body:
+    if request.method == 'PUT':
+        data = request.get_json()
+        if not data:
             return Response("Not a JSON", 400)
-        HTTP_body['id'] = a_review.id
-        HTTP_body['user_id'] = a_review.user_id
-        HTTP_body['place_id'] = a_review.place_id
-        HTTP_body['created_at'] = a_review.created_at
-        a_review.__init__(**HTTP_body)
-        a_review.save()
-        return (jsonify(a_review.to_dict()), 200)
-    return (jsonify(a_review.to_dict()), 200)
+        data['id'] = review.id
+        data['user_id'] = review.user_id
+        data['place_id'] = review.place_id
+        data['created_at'] = review.created_at
+        review.__init__(**data)
+        review.save()
+        return jsonify(review.to_dict()), 200
+
+    return jsonify(review.to_dict()), 200
