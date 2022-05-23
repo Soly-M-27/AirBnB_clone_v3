@@ -18,18 +18,17 @@ def get_places(city_id=None):
         abort(404)
 
     if request.method == 'POST':
-        HTTP_body = request.get_json()
-        if not HTTP_body:
+        data = request.get_json()
+        if not data:
             return Response("Not a JSON", 400)
-        if 'user_id' not in HTTP_body:
+        if 'user_id' not in data:
             return Response("Missing user_id", 400)
-        if 'name' not in HTTP_body:
+        if 'name' not in data:
             return Response("Missing name", 400)
-        user = storage.get(User, HTTP_body.get('user_id'))
+        user = storage.get(User, data.get('user_id'))
         if not user:
             abort(404)
-        place = Place(city_id=city.id, user_id=user.id,
-                      name=HTTP_body.get('name'))
+        place = Place(city_id=city.id, user_id=user.id, name=data.get('name'))
         place.save()
         return jsonify(place.to_dict()), 201
 
@@ -55,15 +54,15 @@ def get_place(place_id=None):
         return jsonify({}), 200
 
     if request.method == 'PUT':
-        HTTP_body = request.get_json()
-        if not HTTP_body:
+        data = request.get_json()
+        if not data:
             return Response("Not a JSON", 400)
-        HTTP_body['id'] = place.id
-        HTTP_body['user_id'] = place.user_id
-        HTTP_body['city_id'] = place.city_id
-        HTTP_body['created_at'] = place.created_at
+        data['id'] = place.id
+        data['user_id'] = place.user_id
+        data['city_id'] = place.city_id
+        data['created_at'] = place.created_at
         place.__init__(**data)
         place.save()
         return jsonify(place.to_dict()), 200
 
-    return jsonify(place.to_dict()), 200
+    return jsonify(place.to_dct()), 200
